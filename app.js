@@ -21,6 +21,8 @@ const showImages = (images) => {
   gallery.innerHTML = '';
   // show gallery title
   galleryHeader.style.display = 'flex';
+ // console.log(images.length);
+ if(images.length > 0){
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
@@ -30,6 +32,16 @@ const showImages = (images) => {
    // 
   });
   toggleSpinner();
+ }else{
+  const errorMsg = document.getElementById('error-message');
+  errorMsg.innerText = 'Sorry no images found!';
+ }
+  
+}
+
+function displayError(error){
+  const errorMsg = document.getElementById('error-message');
+  errorMsg.innerText = error;
 }
 
 const getImages = (query) => {
@@ -37,8 +49,9 @@ const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))//showImages(data.hitS)
-    .catch(err => console.log(err))
+    .catch(err => displayError("Sorry Something went wrong! Please try later..."))
 }
+
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
